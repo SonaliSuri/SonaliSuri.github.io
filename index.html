@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.axis--x path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+ 
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+
+</style>
+<svg width="1160" height="500"></svg>
+<script src="//d3js.org/d3.v5.min.js"></script>
+<script>
+
+var svg = d3.select("svg"),
+    margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+var t = new Array(); // array used for x axis 
+var times = new Array(); // array used for the x axis converted into a time object 
+var brics_data = new Array(); // the brics data array 
+var parseTime = d3.timeParse("%Y");
+
+var x = d3.scaleTime().range([0, width]),
+    y = d3.scaleLinear().range([height, 0]),
+    z = d3.scaleOrdinal(d3.schemeCategory10);
+
+var line = d3.line()
+    .curve(d3.curveBasis)
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.price); });    
+
+    
+    
+function make_x_gridlines() {		
+    return d3.axisBottom(x)
+        .ticks(5)
+}
+
+// gridlines in y axis function
+function make_y_gridlines() {		
+    return d3.axisLeft(y)
+        .ticks(5)
+}   
+    
+
+
+
+var filterData = {"Brazil":true,"China":true,"India":true,"Russia":true,"South Africa":true,"United States":true};  
+
+
+    
+//d3.tsv("MultiLineData.tsv", type, function(error, data) {
+function drawChart(filterData){
+d3.csv("BRICSdata.csv",type).then(function(data){
+//    d3.csv("EPCSmallMillionBTU.csv").then(function(datanew){
+//d3.tsv("MultiLineData.tsv").then(type,function(error,data) {
+  
+//data=d3.transpose([datanew]);
+    
+
+    
+    
+   console.log(data);
+  var cities = data.columns.slice(1).map(function(id) {
+    return {
+      id: id,
+      values: data.map(function(d) {
+        return {date: d.date, price: d[id]};
+      })
+    };
+  });
+    newcities=cities;
+    cities= cities.filter(function(d){return filterData[d.id]==true});
+  console.log("Cities"+cities); <!-- this is an array of length 3-->
+  console.log("Data"+data);   <!-- this is an array of length 366  excluding the header-->
+  console.log(data.columns); <!-- this is an array of length 4 -->
+  console.log(data.length); <!-- 366 -->
+  console.log(data.columns.slice(1)); <!-- new array starting from 1st element -->
+  console.log(data.columns.slice(1).map(function(dummy){return dummy.toUpperCase();}));
+  console.log(data.columns.slice(1).map(function(c){return c}));
+  console.log(data.map(function(dummy){return dummy["United States"];})); <!-- creates a new array of length 365 -->
+console.log(data)
+  console.log(d3.extent(data, function(d) { return d.date; }));
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+
+  y.domain([
+    d3.min(cities.filter(function(d){return filterData[d.id]==true;}), function(c) { return d3.min(c.values, function(d) { return d.price; }); }),
+    d3.max(cities.filter(function(d){return filterData[d.id]==true;}), function(c) { return d3.max(c.values, function(d) { return d.price; }); })
+  ]);
+    console.log("Cities are:"+cities);
+     <!--console.log(cities.map(function(c) {return c.id;}));-->
+  
+  z.domain(newcities.map(function(c) { return c.id; }));
+  
+    let yearFormat = d3.timeFormat('%Y');
+    
+    
+    g.selectAll("*").remove();
+  var legend = g.selectAll('g')
+      .data(newcities)
+      .enter()
+    .append('g')
+      .attr('class', 'legend');
+    
+    legend.append("rect")
+   // .attr("r", 10)
+    
+      .attr('x', width  +100)
+      .attr('y', function(d, i){ return i *  20;})
+      .attr('width', 10)
+      .attr('height', 10)
+       
+      .style('fill', function(d) { 
+        console.log(d.id);
+        if (filterData[d.id]==true)
+            {
+                
+       
+            return  z(d.id);
+            }
+        
+      })
+    
+     .style("stroke",function(d) { 
+        
+       
+        return z(d.id);
+           
+        
+      });
+      
+    legend.append('text')
+     .attr('x', width +48)
+    .attr('y', margin.top-30)
+     .attr("transform", "translate(10," + 3 + ")")
+      .text("Please click on the color legend")
+    .style("font", "15px sans-serif");
+      
+    legend.append('text')
+      .attr('x', width +108)
+      .attr('y', function(d, i){ return (i *  20) + 9;})
+        .attr("transform", "translate(10," + 3 + ")")
+      .text(function(d){ return d.id; });
+
+    legend
+  		.on("click",function(d){
+  				//filter data		
+  				//filterData[d.name]=!filterData[d.name];
+        
+  				reDraw(d.id);
+    });
+
+ 
+    //svg.selectAll("*").remove();
+  //LEGEND
+    
+    
+    
+
+  g.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
+     .append("text")
+      
+      .attr("x", 875)
+      .attr("dx", "0.71em")
+      .attr("fill", "#000")
+    .text("Year");
+
+  g.append("g")
+      .attr("class", "axis axis--y")
+      .call(d3.axisLeft(y).ticks(5)
+              )
+    
+   
+
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+    .attr("x", -175)
+      .attr("dy", "-4.5em")
+      .attr("fill", "#000")
+    .text("Million BTUs Per Person");
+  
+              
+
+    
+ g.append("g")			
+      .attr("class", "grid")
+      .attr("transform", "translate(0," + height + ")")
+      .call(make_x_gridlines()
+          .tickSize(-height)
+          .tickFormat("")
+      )
+
+  // add the Y gridlines
+  g.append("g")			
+      .attr("class", "grid")
+      .call(make_y_gridlines()
+          .tickSize(-width)
+          .tickFormat("")
+      )
+   
+   /* 
+var xAxis = d3.axisBottom(xScale);
+
+var yAxis = d3.axisLeft()
+.scale(yScale)
+.ticks(5)
+.tickFormat(function(d) { return  "$"+d3.format(",")(d) });*/
+     // .text("Price, ºF")
+    ;
+
+  var city = g.selectAll(".city")
+    .data(cities.filter(function(d){return filterData[d.id]==true;}))
+    .enter().append("g")
+      .attr("class", "city");
+
+  city.append("path")
+      .attr("class", "line")
+        
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return z(d.id); });
+//console.log(city.node());
+     svg.selectAll(".city")
+      .data(cities.filter(function(d){return filterData[d.id]==true;}))
+      .exit()
+      .remove();
+    
+ var totalLength = width+width;
+   
+
+    city
+      .attr("stroke-dasharray", totalLength + " " + totalLength)
+      .attr("stroke-dashoffset", totalLength)
+.transition()
+    .duration(3000)
+			  .ease(d3.easeLinear)
+
+        .attr("stroke-dashoffset", 0);
+  
+  
+
+
+  city.append("text")
+      .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.price) + ")"; })
+      .attr("x", 3)
+      .attr("dy", "0.35em")
+      .style("font", "10px sans-serif")
+      .text(function(d) { return d.id; })
+  
+    
+    g.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2)+2)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("font-weight","bold") 
+        .style('fill', "#1A719C")
+    
+        .text("Energy Consumption Per Capita");
+    
+  var mouseG = g.append("g")
+      .attr("class", "mouse-over-effects");
+
+    mouseG.append("path") // this is the black vertical line to follow mouse
+      .attr("class", "mouse-line")
+      .style("stroke", "black")
+      .style("stroke-width", "1px")
+      .style("opacity", "0")
+    //.attr("transform", "translate("+margin.left+","+(0)+")");
+      
+    var lines = document.getElementsByClassName('line');
+
+    var mousePerLine = mouseG.selectAll('.mouse-per-line')
+      .data(cities.filter(function(d){return filterData[d.id]==true;}))
+      .enter()
+      .append("g")
+      .attr("class", "mouse-per-line")
+   ;
+
+    mousePerLine.append("circle")
+      .attr("r", 4)
+      .style("stroke", function(d) {
+        
+        return z(d.id);
+            
+      })
+      .style("fill", "none")
+      .style("stroke-width", "1px")
+      .style("opacity", "0")
+     //.attr("transform", "translate("+margin.left+","+(margin.top+1)+")");
+
+    mousePerLine.append("text")
+      .attr("transform", "translate(10,3)");
+    
+      
+    mouseG.append('svg:rect') // append a rect to catch mouse movements on canvas
+      .attr('width', width+margin.left-50) // can't catch mouse events on a g element
+      .attr('height', height+margin.top+margin.bottom)
+      .attr('fill', 'none')
+      .attr('pointer-events', 'all')
+   // .attr("transform", "translate("+margin.left+","+0+")")
+      .on('mouseout', function() { // on mouse out hide line, circles and text
+        d3.select(".mouse-line")
+          .style("opacity", "0");
+        d3.selectAll(".mouse-per-line circle")
+          .style("opacity", "0");
+        d3.selectAll(".mouse-per-line text")
+          .style("opacity", "0");
+      })
+      .on('mouseover', function() { // on mouse in show line, circles and text
+        d3.select(".mouse-line")
+          .style("opacity", "1")
+        //.attr("transform", "translate("+margin.left+","+(margin.top)+")");
+        d3.selectAll(".mouse-per-line circle")
+          .style("opacity", "1")
+        //.attr("transform", "translate("+margin.left+","+(margin.top)+")");
+        d3.selectAll(".mouse-per-line text")
+          .style("opacity", "1")
+        //.attr("transform", "translate(10,"+(0)+")");
+      })
+      .on('mousemove', function() { // mouse moving over canvas
+        var mouse = d3.mouse(this);
+        d3.select(".mouse-line")
+          .attr("d", function() {
+            var d = "M" + (mouse[0]) + "," + (height);
+            d += " " + mouse[0] + "," + 0;
+            return d;
+          });
+d3.selectAll(".mouse-per-line")
+          .attr("transform", function(d, i) {
+            console.log(width/mouse[0])
+            var xDate = x.invert(mouse[0]),
+                bisect = d3.bisector(function(d) { return d.date; }).right;
+                idx = bisect(d.values, xDate);
+            
+            var beginning = 0,
+                end = lines[i].getTotalLength(),
+                target = null;
+
+            while (true){
+              target = Math.floor((beginning + end) / 2);
+              pos = lines[i].getPointAtLength(target);
+              if ((target === end || target === beginning) && pos.x !== mouse[0]) {
+                  break;
+              }
+              if (pos.x > mouse[0])      end = target;
+              else if (pos.x < mouse[0]) beginning = target;
+              else break; //position found
+            }
+            
+            d3.select(this).select('text')
+              .text(y.invert(pos.y).toFixed(2));
+              
+            return "translate(" + (mouse[0]) + "," + (pos.y) +")";
+          });
+      });
+
+svg.selectAll(".city")
+      .data(cities.filter(function(d){return filterData[d.id]==true;}))
+      .exit()
+      .remove();
+
+
+    })
+}
+   // .catch(function(error){
+    // console.log("Error") 
+  //});
+
+function type(d, _, columns) {
+    //console.log(columns)
+  d.date = parseTime(d.date);
+  for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
+  return d;
+}
+console.log(filterData);
+drawChart(filterData);
+function reDraw(id){
+	
+	filterData[id]=!filterData[id];
+	console.log("redraw :");
+	console.log(filterData);
+	drawChart(filterData);
+}
+
+</script>
