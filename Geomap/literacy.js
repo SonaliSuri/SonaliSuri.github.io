@@ -125,31 +125,31 @@ Fill colors based on literacy. lover the literacy lighter the color.
                         if(!literacy){
                             return '#ccc';
                         }
-                        if(literacy < 60){
+                        if(literacy < 61){
                             return 'rgb(247,251,255)';
                         }
-                        else if (literacy < 70){
+                        else if (literacy < 71){
                             return 'rgb(222,235,247)';
                         }
-                        else if (literacy < 75){
+                        else if (literacy < 76){
                             return 'rgb(198,219,239)';
                         }
-                        else if (literacy < 78){
+                        else if (literacy < 79){
                             return 'rgb(158,202,225)';
                         }
-                        else if (literacy < 80){
+                        else if (literacy < 81){
                             return 'rgb(107,174,214)';
                         }
-                        else if (literacy < 85){
+                        else if (literacy < 86){
                             return 'rgb(66,146,198)';
                         }
-                        else if (literacy < 88){
+                        else if (literacy < 89){
                             return 'rgb(33,113,181)';
                         }
-                        else if (literacy < 90){
+                        else if (literacy < 91){
                             return 'rgb(32,110,166)';
                         }
-                        else if (literacy < 92){
+                        else if (literacy < 93){
                             return 'rgb(31,60,100)';
                         }
                         else{
@@ -190,7 +190,7 @@ Appending a rectangle for each color
                     .attr('x', 25)
                     .attr('y', 16)
                     .text(function(d, i){ 
-                    var ranges = ["<60", "<70", "<75", "<78", "<80", "<85", "<88", "<90", "<92", ">=92"];
+                    var ranges = ["0-60", "61-70", "71-75", "76-78", "79-80", "81-85", "86-88", "89-90", "91-92", ">=92"];
                         return ranges[i] + "   %";
                     });
         });
