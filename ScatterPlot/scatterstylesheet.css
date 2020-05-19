@@ -1,0 +1,33 @@
+body {
+  font: 13px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 200px;
+  height: 120px;
+  padding: 2px;
+    
+  font: 12px sans-serif;
+  background: white;
+  pointer-events: all
+ 
+border: 0px;
+pointer-events: none;
+    /*border-radius: 8px;*/
+}
+table
+{
+    border:1px solid black;
+}
