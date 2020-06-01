@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="utf-8">
+  <head>
+    <title>Mumbai Ward Level Population</title>
+
+    <style>
+
+      body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          font-family: 'Lato', sans-serif;
+          color: #272a2f;
+      }
+
+      #mapcanvas {
+        width: 960px;
+        height: 600px;
+        margin: 10px 10px 10px 10px;
+        /*padding: 5px 5px 5px 5px;*/
+        border: 0.2px solid #555;
+
+      }
+
+      .mumbai {
+        fill: #f6f6f6;
+        /*fill: #eee;*/
+      }
+
+      .ward:hover {
+        opacity: 0.4;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .mumbai-boundary {
+        fill: none;
+        stroke: #fff;
+        stroke-width: none;
+      }
+
+      div.tooltip {
+        color: #222;
+        background-color: #fff;
+        padding: .5em;
+        text-shadow: #f5f5f5 0 1px 0;
+        border-radius: 2px;
+        opacity: 0.9;
+        position: absolute;
+      }
+
+      .axis text {
+        font: 10px;
+      }
+
+      .axis line, .axis path {
+        fill:none;
+        stroke:#000;
+        shape-rendering:crispEdges;
+      }
+
+      /*
+       Fill ranges for Quantized scale 
+       ref: https://bl.ocks.org/mbostock/4060606
+      .q0-9 { fill:rgb(247,251,255); }
+      .q1-9 { fill:rgb(222,235,247); }
+      .q2-9 { fill:rgb(198,219,239); }
+      .q3-9 { fill:rgb(158,202,225); }
+      .q4-9 { fill:rgb(107,174,214); }
+      .q5-9 { fill:rgb(66,146,198); }
+      .q6-9 { fill:rgb(33,113,181); }
+      .q7-9 { fill:rgb(8,81,156); }
+      .q8-9 { fill:rgb(8,48,107); }
+      */
+
+    </style>
+
+    <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+  <!--<div id="mapcanvas" ></div> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+    <script src="https://d3js.org/queue.v1.min.js"></script>
+    <!-- Legend Library http://d3-legend.susielu.com/ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.10.0/d3-legend.js"></script>
+
+
+    <script>
+
+
+
+      var width = 1060,
+          height = 800;
+
+      // PROJECTION   
+      /*
+      A Different projection which doesn't work very well for Mumbai
+      var projection = d3.geo.conicConformal() 
+          .rotate([0, 0, 0])  
+          .center([72.8777, 19.089]) // Approximately the coordinates of Mumbai (slightly North)
+          .scale(90000)
+          .parallels([37.06666666666667, 38.43333333333333])
+          .translate([width / 2, height / 2])
+          .precision(.1);
+      */
+      // MERCATOR
+      var projection = d3.geo.mercator()
+          .center([72.8777, 19.089]) // Approximately the coordinates of Mumbai (slightly North)
+          .scale(90000)
+          .translate([width / 2, 310]);
+
+      var path = d3.geo.path()
+          .projection(projection);
+
+
+      var svg = d3.select("body").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+      // Title inside the Map
+      svg.append("text")
+          .attr("x", "50")             
+          .attr("y", "29")
+          .attr("text-anchor", "start")  
+          .style("font-size", "16px") 
+          .style("text-decoration", "none")  
+          .text("Mumbai Ward Level Map");
+
+      // Div for the tooltip 
+      var tooltip = d3.select('body').append('div')
+          .attr('class', 'hidden tooltip');
+
+      // Defining the scale
+      var linear = d3.scale.linear()
+                   .range(["beige", "red"]);
+
+
+
+      /*
+      // Linear 2
+      // Excluding outliers (but please check the data first)
+      var quantize = d3.scale.quantize()
+                        .range(d3.range(9).map(function(i) { return "q" + i +"-9";}))
+      var linear2 = d3.scale.linear()
+                   .range(["red", "white", "green"]);
+
+      // A scale to try with different thresholds. May be interesting to do this
+      var threshold = d3.scale.threshold()
+                   .domain([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
+                   .range(["#8e0152", "#c51b7d", "#de77ae", "#f1b6da", "#fde0ef", "#f7f7f7", "#e6f5d0", "#b8e186", "#7fbc41", "#4d9221", "#276419"]);
+      */
+
+      // Using the queue library. We may be able to replace this with something that d3js 
+      // do on its own
+      queue()
+            .defer(d3.json, 'Mumbai_Topojson.topojson')               
+            .defer(d3.csv, 'ward_level_collated.csv') // REPLACE REF WITH DATA
+            .await(ready);
+
+      // The default property to be mapped
+      var property = 'TOT_P_DEN';
+
+      /**
+      *
+      * Finds the min and max for the property in the data. 
+      * Also assumes that the property has integer values. 
+      * @param data
+      * @param property
+      * @return 
+      */
+      function calculate_domain(data, property){
+
+        var d_prop = data.map(function(d){ return parseInt(d[property]);});
+        var ret_value = {};
+
+
+        ret_value['min'] = d3.min(d_prop);
+        ret_value['max'] = d3.max(d_prop);
+        return ret_value;
+      };
+
+      /**
+      *
+      * The ready function which after the data is loaded creates all the elements
+      * etc. 
+      *
+      */
+      function ready(error, MAP, DATA) {    // REPLACE REF WITH DATA
+        if (error) throw error; 
+
+        //console.log(MAP)   // CHECK YOUR MAP
+        //console.log(DATA)  // CHECK YOUR DATA
+
+        // Set domain for the scales
+        var dom = calculate_domain(DATA, property);
+        linear.domain([dom['min'], dom['max']]);
+
+        // Mumbai data
+        var mumbai = topojson.feature(MAP, MAP.objects.Mumbai);  
+
+        var ward_id = {};
+        DATA.forEach(function(d) { ward_id[d.Ward_Alphabet] = d.Ward_Alphabet})
+
+        var ward_names = {};
+        DATA.forEach(function(d) { ward_names[d.Ward_Alphabet] = d.Ward_Names})
+
+        var prop_value = {};
+        DATA.forEach(function(d) { prop_value[d.Ward_Alphabet] = +parseInt(d[property]); });
+        //console.log(prop_value);
+
+        svg.append("g")
+          .attr("class", "mumbai")
+          .selectAll("path")
+          .data(mumbai.features)
+          .enter()
+            .append("path")
+            .attr("class", "ward")
+            .attr("d", path)
+        //    Try out the different scales.
+            .style("fill", function(d) { 
+              return linear(prop_value[d.properties.name]); 
+            }) // population
+            .on('mousemove', function(d) {
+              // Gets coordinates for the Mouse pointer
+              var mouse = d3.mouse(svg.node()).map(function(d) {
+                  return parseInt(d);
+              });
+              // Un hides the div for the tooltip and the positions it
+              // Also adds the html content
+              // @TODO: Format the population values to put commas
+              tooltip.classed('hidden', false)
+                  .attr('style', 'left:' + (mouse[0] + 15) +
+                          'px; top:' + (mouse[1] - 35) + 'px')
+                  .html(ward_names[d.properties.name] + ": "+ prop_value[d.properties.name].toLocaleString());
+            })
+            .on('mouseout', function() {
+                tooltip.classed('hidden', true);
+            });
+
+
+
+      //Borders 
+      svg.append("path")
+          .datum(topojson.mesh(MAP, MAP.objects.Mumbai, function(a, b) { return a !== b; }))
+          .attr("class", "mumbai-boundary")
+          .attr("d", path);  
+
+      // Legend 
+      svg.append("g")
+          .attr("class", "legendLinear")
+          .attr("transform", "translate(50, 100)");
+
+      var legendLinear = d3.legend.color()
+                                  .scale(linear)
+                                  .title("Population Density / Sq. KM (2011)")
+                                  .labelFormat(d3.format(",.0f"));
+      svg.select(".legendLinear")
+          .call(legendLinear);
+
+      };
+
+
+    </script>
+  </body>
+</html>
+
