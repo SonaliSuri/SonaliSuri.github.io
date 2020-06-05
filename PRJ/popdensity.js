@@ -2,13 +2,13 @@
 Define width and height
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
  var w = 850,
-          h = 950;
+          h = 850;
 
 
  var projection = d3.geoMercator()
           .center([77.1025,28.7041]) // Approximately the coordinates of Delhi (slightly North)
-          .scale(90500)
-          .translate([w / 1.9, 310]);
+          .scale(70500)
+          .translate([w / 2.5, 270]);
 
       var path = d3.geoPath()
           .projection(projection);
@@ -32,8 +32,8 @@ var svg = d3.select("body")
             .attr("height", h);
 
 
-var w=850;
-var h=900;
+var w=540;
+var h=850;
 /*------------------------------------------------------------------------------------------------------------------------------------------------------
 Define tooltip
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -51,15 +51,33 @@ var color = d3.scaleQuantize()
 
                 
 var color2 = d3.scaleQuantize()
-.range(['rgb(255,255,217)','rgb(237,248,177)','#F0BA70','rgb(233,199,180)','#F68756','#EA5A3E','#DA2B27','#C12600','#9B0000','#6D0000','#580000']); 
+.range(['#5e4fa2',
+'#3288bd',
+'#66c2a5',
+'#abdda4',
+'#e6f598',
+'#ffffbf',
+'#fee08b',
+'#fdae61',
+'#f46d43',
+'#d53e4f',
+'#9e0142']); 
+
+
+
+
+
+
+
+
+
 /*------------------------------------------------------------------------------------------------------------------------------------------------------
 Load populationdensity.csv
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 d3.selectAll(".dataset")
             .on("change", update);
-d3.selectAll(".dataset2")
-            .on("change", update2);
+
 var stateData1=[]
 var stateData2=[]
 d3.csv("bangalore.csv").then(function(populationcsv) {
@@ -72,7 +90,10 @@ Store data in stateData
         for(var i = 0; i < populationcsv.length; i++){
             stateData1.push({region:populationcsv[i].Ward,
                              density:populationcsv[i].TOT_P,
-                           literacy:populationcsv[i].P_LIT,
+                             literacy:populationcsv[i].P_LIT,
+                             literacyrate:populationcsv[i].P_LIT*100/populationcsv[i].TOT_P,
+                             unemployed:populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P,
+                            
                            to_plot:populationcsv[i].TOT_P});
         }
     
@@ -83,6 +104,8 @@ d3.csv("Delh_new.csv").then(function(populationcsv) {
             stateData2.push({region:populationcsv[i].Ward,
                              density:populationcsv[i].TOT_P,
                                 literacy:populationcsv[i].P_LIT,
+                             literacyrate:populationcsv[i].P_LIT*100/populationcsv[i].TOT_P,
+                             unemployed:populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P,
                            to_plot: populationcsv[i].TOT_P});
         }
    
@@ -102,27 +125,26 @@ Load populationdensity.csv
 function update(val=this.value)
 {
    
-    var types = d3.select('input[name="dataset2"]:checked').node().value
     
      var svg5 = d3.selectAll("svg");
       svg5.remove("*");
  
      var w = 850,
-          h = 900;
+          h = 850;
  svg = d3.select("body")
             .append("svg")
             .attr("width", w)
             .attr("height", h);
-      var w = 700,
-          h = 900;
+      var w = 540,
+          h = 850;
    
 
 
 
  var projection = d3.geoMercator()
           .center([77.1025,28.7041]) // Approximately the coordinates of Delhi (slightly North)
-          .scale(90500)
-          .translate([w / 1.9, 310]);
+          .scale(70500)
+          .translate([w / 2.3, 270]);
 
    
 
@@ -154,6 +176,8 @@ Store data in stateData
             stateData1.push({region:populationcsv[i].Ward,
                              density:populationcsv[i].TOT_P,
                                 literacy:populationcsv[i].P_LIT,
+                             literacyrate:populationcsv[i].P_LIT*100/populationcsv[i].TOT_P,
+                             unemployed:populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P,
                            to_plot: populationcsv[i].TOT_P});
         }
     
@@ -161,20 +185,26 @@ Store data in stateData
             stateData2.push({region:populationcsv[i].Ward,
                              density:populationcsv[i].TOT_P,
                                 literacy:populationcsv[i].P_LIT,
+                             literacyrate:populationcsv[i].P_LIT*100/populationcsv[i].TOT_P,
+                             unemployed:populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P,
                            to_plot: populationcsv[i].P_LIT});
         }
         for(var i = 0; i < populationcsv.length; i++){
             stateData5.push({region:populationcsv[i].Ward,
                              density:populationcsv[i].TOT_P,
                                 literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].TOT_P*100/tot_pop_delhi});
+                             literacyrate:populationcsv[i].P_LIT*100/populationcsv[i].TOT_P,
+                             unemployed:populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P,
+                           to_plot: populationcsv[i].P_LIT*100/populationcsv[i].TOT_P});
         }
     
         for(var i = 0; i < populationcsv.length; i++){
             stateData6.push({region:populationcsv[i].Ward,
                              density:populationcsv[i].TOT_P,
                                 literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].P_LIT*100/populationcsv[i].TOT_P});
+                             literacyrate:populationcsv[i].P_LIT*100/populationcsv[i].TOT_P,
+                             unemployed:populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P,
+                           to_plot: populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P});
         }
          
         
@@ -184,8 +214,8 @@ Store data in stateData
 
 var projection2 = d3.geoMercator()
           .center([77.5946, 12.9716]) // Approximately the coordinates of Bangalore (slightly North)
-          .scale(105000)
-          .translate([w / 2, 410]);
+          .scale(95000)
+          .translate([w / 2.3, 370]);
 
       var path2 = d3.geoPath()
           .projection(projection2);
@@ -207,6 +237,8 @@ Store data in stateData
             stateData3.push({region:populationcsv[i].Ward,
                              density:populationcsv[i].TOT_P,
                                 literacy:populationcsv[i].P_LIT,
+                             literacyrate:populationcsv[i].P_LIT*100/populationcsv[i].TOT_P,
+                             unemployed:populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P,
                            to_plot: populationcsv[i].TOT_P});
         }
 
@@ -214,44 +246,50 @@ Store data in stateData
             stateData4.push({region:populationcsv[i].Ward,
                              density:populationcsv[i].TOT_P,
                                 literacy:populationcsv[i].P_LIT,
+                             literacyrate:populationcsv[i].P_LIT*100/populationcsv[i].TOT_P,
+                             unemployed:populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P,
                            to_plot: populationcsv[i].P_LIT});
         }
     for(var i = 0; i < populationcsv.length; i++){
             stateData7.push({region:populationcsv[i].Ward,
                              density:populationcsv[i].TOT_P,
                                 literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].TOT_P*100/tot_pop_bang});
+                             literacyrate:populationcsv[i].P_LIT*100/populationcsv[i].TOT_P,
+                             unemployed:populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P,
+                           to_plot: populationcsv[i].P_LIT*100/populationcsv[i].TOT_P});
         }
 
         for(var i = 0; i < populationcsv.length; i++){
             stateData8.push({region:populationcsv[i].Ward,
                              density:populationcsv[i].TOT_P,
                                 literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].P_LIT*100/populationcsv[i].TOT_P});
+                             literacyrate:populationcsv[i].P_LIT*100/populationcsv[i].TOT_P,
+                             unemployed:populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P,
+                           to_plot: populationcsv[i].NON_WORK_P*100/populationcsv[i].TOT_P});
         }
          
        
     
     
 });
-     if (val=="population" && types=="total")
+     if (val=="population")
             {
-                popDelhi(stateData1,stateData3,val,types);
+                popDelhi(stateData1,stateData3,val);
                 
             }
-        else if (val=="literacy" && types=="total")
+        else if (val=="literacy")
             {
-                popDelhi(stateData2,stateData4,val,types);
+                popDelhi(stateData2,stateData4,val);
                 
             }
-    else if (val=="population" && types=="perc")
+    else if (val=="literacyrate")
             {
-                popDelhi(stateData5,stateData7,val,types);
+                popDelhi(stateData5,stateData7,val);
                 
             }
-        else if (val=="literacy" && types=="perc")
+        else if (val=="unemployment")
             {
-                popDelhi(stateData6,stateData8,val,types);
+                popDelhi(stateData6,stateData8,val);
                 
             }
     
@@ -261,168 +299,8 @@ Store data in stateData
 
 }
 
-function update2(val=this.value)
-{
-    
-    types = d3.select('input[name="dataset"]:checked').node().value
-   
-     var svg5 = d3.selectAll("svg");
-      svg5.remove("*");
- 
-     var w = 850,
-          h = 900;
- svg = d3.select("body")
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h);
-      var w = 700,
-          h = 900;
-   
 
-
-
- var projection = d3.geoMercator()
-          .center([77.1025,28.7041]) // Approximately the coordinates of Delhi (slightly North)
-          .scale(90500)
-          .translate([w / 1.9, 310]);
-
-   
-
-
-
-/*------------------------------------------------------------------------------------------------------------------------------------------------------
-Define path generator
-------------------------------------------------------------------------------------------------------------------------------------------------------*/
-var path = d3.geoPath()
-             .projection(projection);
-    console.log("MNW"+val);
-    
-    var stateData1 = [];
-    var stateData2 = [];
-    var stateData3 = [];
-    var stateData4 = [];
-    var stateData5 = [];
-    var stateData6 = [];
-    var stateData7 = [];
-    var stateData8 = [];
-    d3.csv("Delh_new.csv").then(function(populationcsv) {
-    
-    
-/*------------------------------------------------------------------------------------------------------------------------------------------------------
-Store data in stateData
-------------------------------------------------------------------------------------------------------------------------------------------------------*/
-        var tot_pop_delhi=16368899;
-        for(var i = 0; i < populationcsv.length; i++){
-            stateData1.push({region:populationcsv[i].Ward,
-                             density:populationcsv[i].TOT_P,
-                                literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].TOT_P*100/tot_pop_delhi});
-        }
-    
-        for(var i = 0; i < populationcsv.length; i++){
-            stateData2.push({region:populationcsv[i].Ward,
-                             density:populationcsv[i].TOT_P,
-                                literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].P_LIT*100/populationcsv[i].TOT_P});
-        }
-        for(var i = 0; i < populationcsv.length; i++){
-            stateData5.push({region:populationcsv[i].Ward,
-                             density:populationcsv[i].TOT_P,
-                                literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].TOT_P});
-        }
-    
-        for(var i = 0; i < populationcsv.length; i++){
-            stateData6.push({region:populationcsv[i].Ward,
-                             density:populationcsv[i].TOT_P,
-                                literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].P_LIT});
-        }
-         
-        
-    });
-  
-
-
-var projection2 = d3.geoMercator()
-          .center([77.5946, 12.9716]) // Approximately the coordinates of Bangalore (slightly North)
-          .scale(105000)
-          .translate([w / 2, 410]);
-
-      var path2 = d3.geoPath()
-          .projection(projection2);
-
-
-
-d3.csv("bangalore.csv").then(function(populationcsv) {
-
-    
-/*------------------------------------------------------------------------------------------------------------------------------------------------------
-Store data in stateData
-------------------------------------------------------------------------------------------------------------------------------------------------------*/
-        
-    
-    var tot_pop_bang=8749944;
-    
-  
-        for(var i = 0; i < populationcsv.length; i++){
-            stateData3.push({region:populationcsv[i].Ward,
-                             density:populationcsv[i].TOT_P,
-                                literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].TOT_P*100/tot_pop_bang});
-        }
-
-        for(var i = 0; i < populationcsv.length; i++){
-            stateData4.push({region:populationcsv[i].Ward,
-                             density:populationcsv[i].TOT_P,
-                                literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].P_LIT*100/populationcsv[i].TOT_P});
-        }
-    for(var i = 0; i < populationcsv.length; i++){
-            stateData7.push({region:populationcsv[i].Ward,
-                             density:populationcsv[i].TOT_P,
-                                literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].TOT_P});
-        }
-
-        for(var i = 0; i < populationcsv.length; i++){
-            stateData8.push({region:populationcsv[i].Ward,
-                             density:populationcsv[i].TOT_P,
-                                literacy:populationcsv[i].P_LIT,
-                           to_plot: populationcsv[i].P_LIT});
-        }
-         
-       
-    
-    
-});
-     if (val=="total" && types=="population")
-            {
-                popDelhi(stateData5,stateData7,types,val);
-                
-            }
-        else if (val=="total" &&  types=="literacy")
-            {
-                popDelhi(stateData6,stateData8,types,val);
-                
-            }
-    else if (val=="perc" &&  types=="population")
-            {
-                popDelhi(stateData1,stateData3,types,val);
-                
-            }
-        else
-            {
-                popDelhi(stateData2,stateData4,types,val);
-                
-            }
-    
-    
-   
-
-}
-
-function popDelhi(stateData,state2Data,types,tmp)
+function popDelhi(stateData,state2Data,types)
 
 
 {
@@ -431,7 +309,7 @@ function popDelhi(stateData,state2Data,types,tmp)
 /*------------------------------------------------------------------------------------------------------------------------------------------------------
 Appending a rectangle for each color
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
-    if (types=="population" && tmp=="total")
+    if (types=="population")
         {
              var legend = d3.select('svg')
                        .append('g')
@@ -443,7 +321,7 @@ Appending a rectangle for each color
                        .text("hi there")
                        .attr('transform', function(d, i){
                            var height = 30;
-                           var x = 20;
+                           var x = 710;
                            var y = i * height;
                            return 'translate(' + x + ',' + (y + 40) + ')';
                        });
@@ -461,19 +339,19 @@ Appending a rectangle for each color
                     });
      
         }
-    else if (types=="literacy" && tmp=="total")
+    else if (types=="literacy")
         {
              var legend = d3.select('svg')
                        .append('g')
                        .selectAll('g')
-                       .data(color2.range())
+                       .data(color.range())
                        .enter()
                        .append('g')
                        .attr('class', 'legend')
                        .text("hi there")
                        .attr('transform', function(d, i){
                            var height = 30;
-                           var x = 20;
+                           var x = 710;
                            var y = i * height;
                            return 'translate(' + x + ',' + (y + 40) + ')';
                        });
@@ -481,7 +359,7 @@ Appending a rectangle for each color
                     .attr('width', 20)
                     .attr('height', 20)
                     .style('fill', function(d){ return d; })
-                    .style('stroke', color2);
+                    .style('stroke', color);
             legend.append('text')
                     .attr('x', 25)
                     .attr('y', 16)
@@ -491,7 +369,7 @@ Appending a rectangle for each color
                     });
               
         }
-    else if (types=="population" && tmp=="perc")
+    else if (types=="literacyrate")
         {
              var legend = d3.select('svg')
                        .append('g')
@@ -503,7 +381,7 @@ Appending a rectangle for each color
                        .text("hi there")
                        .attr('transform', function(d, i){
                            var height = 30;
-                           var x = 20;
+                           var x = 710;
                            var y = i * height;
                            return 'translate(' + x + ',' + (y + 40) + ')';
                        });
@@ -516,12 +394,12 @@ Appending a rectangle for each color
                     .attr('x', 25)
                     .attr('y', 16)
                     .text(function(d, i){
-                    var ranges = ["0%-0.09%","0.1%-0.19%","0.2%-0.29%","0.3%-0.39%","0.4%-0.49%","0.5%-0.59%","0.6%-0.79%","0.8%-0.99%","1%-4.99%","5%-9.99%", ">=10%"];
+                    var ranges = ["0%-1%","1%-49%","50%-64%","65%-69%","70%-72%","73%-75%","76%-81%","82%-84%","85%-86%","87%-90%", ">=91%"];
                         return ranges[i];
                     });
      
         }
-    else if (types=="literacy" && tmp=="perc")
+    else if (types=="unemployment")
         {
              var legend = d3.select('svg')
                        .append('g')
@@ -533,7 +411,7 @@ Appending a rectangle for each color
                        .text("hi there")
                        .attr('transform', function(d, i){
                            var height = 30;
-                           var x = 20;
+                           var x = 710;
                            var y = i * height;
                            return 'translate(' + x + ',' + (y + 40) + ')';
                        });
@@ -546,7 +424,7 @@ Appending a rectangle for each color
                     .attr('x', 25)
                     .attr('y', 16)
                     .text(function(d, i){
-                    var ranges = ["0%-0.99%","1%-2.99%","3%-4.99%","5%-9.99%","10%-24.99%","25%-50%","51%-50%","51%-70%", "71%-75.99%", "76%-80%" , "81%-90.99%", ">=91%"];
+                    var ranges = ["0%-9%","10%-40%","41%-44%","45%-47%","48%-54%","55%-57%","58%-59%","60%-64%", "65%-69%", "70%-80%" , ">=81%"];
                         return ranges[i];
                     });
               
@@ -562,6 +440,8 @@ Load json data
             var dataRegionName = region.region;
             var dataDensity = parseFloat(region.density);
             var dataLiteracy = parseFloat(region.literacy);
+            var dataLiteracyRate = parseFloat(region.literacyrate)
+            var dataUnemployment = parseFloat(region.unemployed)
             var toplot=region.to_plot;
            
 /*------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -576,6 +456,8 @@ Find correct feature in json (statename) and assign correct density value from c
                     //console.log(json.features[j].properties.name);
                     json.features[j].properties.density = dataDensity;
                     json.features[j].properties.literacy = dataLiteracy;
+                    json.features[j].properties.literacyrate = dataLiteracyRate;
+                    json.features[j].properties.unemployment = dataUnemployment;
                     json.features[j].properties.toplot = toplot;
                    // console.log(json.features[j].properties.density);
                     break;
@@ -610,11 +492,13 @@ Mouseover and mouseout events for tooltips
                      '<table width="100%" height="100%"><tr><th colspan="3" style="text-align:center">' + 
                           d.properties.Ward_Name +
                          '</th></tr><tr><td width="45%" style="text-align:left">' +                          
-                         'Population</td><td width="5%">:</td><td style="text-align:right">'  + d.properties.density+''+ '</td></tr>'+
+                         'Population</td><td width="5%">:</td><td style="text-align:right">'  + (d3.format(",.0f")(d.properties.density))+''+ '</td></tr>'+
                 '<tr><td style="text-align:left" >'+
-                         'Literacy</td><td width="5%">:</td><td style="text-align:right">'  + d.properties.literacy+ '</td></tr>'+
+                         'Literacy</td><td width="5%">:</td><td style="text-align:right">'  + (d3.format(",.0f")(d.properties.literacy))+ '</td></tr>'+
                         '<tr><td style="text-align:left" >'+
-                        'Literacy %</td><td width="5%">:</td><td style="text-align:right">'  + d.properties.literacy*100/d.properties.density+ '</td></tr>'+
+                        'Literacy %</td><td width="5%">:</td><td style="text-align:right">'  + d.properties.literacyrate.toFixed(1)+'%'+ '</td></tr>'+
+                         '<tr><td style="text-align:left" >'+
+                        'Non working %</td><td width="5%">:</td><td style="text-align:right">'  + d.properties.unemployment.toFixed(1)+'%'+ '</td></tr>'+
                        /* '<tr><td style="text-align:left">'+
                          'EPC </td><td width="5%">:</td><td style="text-align:right">'  + d.epc+ ' Million BTUs'+ '</td></tr><tr><td style="text-align:left">'+ 
                         'Total </td><td width="5%">:</td><td style="text-align:right">'  + d.total +' Trillion BTUs'+ '</td></tr>*/
@@ -635,7 +519,7 @@ Hide tooltip on mouseout
                         .style("top", (d3.event.pageY - 28) + "px");
 			       })
                     .style("fill", function(d){
-                if (types=="population" && tmp=="total")
+                if (types=="population")
                     {
 /*------------------------------------------------------------------------------------------------------------------------------------------------------
 Fill colors based on density. ower the density lighter the color.
@@ -680,47 +564,48 @@ Fill colors based on density. ower the density lighter the color.
                         
                         
                     }
-                else if (types=="literacy" && tmp=="total")
+                else if (types=="literacy")
                     {
-                          var densitycolor = d.properties.toplot;
-                         if(!densitycolor){
+                           var density = d.properties.toplot;
+                        if(!density){
                             return '#ccc';
                         }
-                        if(densitycolor < 5001){
+                        if(density < 5001){
                             return 'rgb(255,255,217)';
                         }
-                        else if (densitycolor < 10501){
+                        else if (density < 10501){
                             return 'rgb(237,248,177)';
                         }
-                        else if (densitycolor < 25001){
-                            return '#F0BA70';
+                        else if (density < 25001){
+                            return 'rgb(199,233,180)';
                         }
-                        else if (densitycolor < 30051){
-                            return 'rgb(233,199,180)';
+                        else if (density < 50051){
+                            return 'rgb(127,205,187)';
                         }
-                        else if (densitycolor < 55001){
-                            return '#F68756';
+                        else if (density < 75001){
+                            return 'rgb(65,182,196)';
                         }
-                        else if (densitycolor < 75001){
-                            return '#EA5A3E';
+                        else if (density < 80001){
+                            return 'rgb(29,145,192)';
                         }
-                        else if (densitycolor < 85000){
-                            return '#DA2B27';
+                        else if (density < 85000){
+                            return 'rgb(34,94,168)';
                         }
-                        else if (densitycolor < 90000){
-                            return '#C12600';
+                        else if (density < 90000){
+                            return 'rgb(37,95,180)';
                         }
-                        else if (densitycolor < 100000){
-                            return '#9B0000';
+                        else if (density < 100000){
+                            return 'rgb(37,52,170)';
                         }
-                        else if (densitycolor < 145001){
-                            return '#6D0000';
+                        else if (density < 145001){
+                            return 'rgb(37,52,148)';
                         }
                         else{
-                            return "#580000";
+                            return "rgb(37,52,108)";
                         }
+                        
                     }
-                else if (types=="population" && tmp=="perc")
+                else if (types=="literacyrate")
                     {
 /*------------------------------------------------------------------------------------------------------------------------------------------------------
 Fill colors based on density. ower the density lighter the color.
@@ -729,34 +614,34 @@ Fill colors based on density. ower the density lighter the color.
                         if(!density){
                             return '#ccc';
                         }
-                        if(density < 0.1){
+                        if(density < 1){
                             return 'rgb(255,255,217)';
                         }
-                        else if (density < 0.2){
+                        else if (density < 50){
                             return 'rgb(237,248,177)';
                         }
-                        else if (density < 0.3){
+                        else if (density < 65){
                             return 'rgb(199,233,180)';
                         }
-                        else if (density < 0.4){
+                        else if (density < 70){
                             return 'rgb(127,205,187)';
                         }
-                        else if (density < 0.5){
+                        else if (density < 73){
                             return 'rgb(65,182,196)';
                         }
-                        else if (density < 0.6){
+                        else if (density < 76){
                             return 'rgb(29,145,192)';
                         }
-                        else if (density <0.8){
+                        else if (density <82){
                             return 'rgb(34,94,168)';
                         }
-                        else if (density < 1){
+                        else if (density < 85){
                             return 'rgb(37,95,180)';
                         }
-                        else if (density < 5){
+                        else if (density < 87){
                             return 'rgb(37,52,170)';
                         }
-                        else if (density < 10){
+                        else if (density < 91){
                             return 'rgb(37,52,148)';
                         }
                         else{
@@ -765,44 +650,46 @@ Fill colors based on density. ower the density lighter the color.
                         
                         
                     }
-                else if (types=="literacy" && tmp=="perc")
+                else if (types=="unemployment")
                     {
-                          var densitycolor = d.properties.toplot;
+                        
+
+var densitycolor = d.properties.toplot;
                          if(!densitycolor){
                             return '#ccc';
                         }
-                        if(densitycolor < 1){
-                            return 'rgb(255,255,217)';
+                        if(densitycolor < 10){
+                            return '#5e4fa2';
                         }
-                        else if (densitycolor < 3){
-                            return 'rgb(237,248,177)';
+                        else if (densitycolor < 41){
+                            return '#3288bd';
                         }
-                        else if (densitycolor < 5){
-                            return '#F0BA70';
+                        else if (densitycolor < 45){
+                            return  '#66c2a5';
                         }
-                        else if (densitycolor < 10){
-                            return 'rgb(233,199,180)';
+                        else if (densitycolor < 48){
+                            return  '#abdda4';
                         }
-                        else if (densitycolor < 25){
-                            return '#F68756';
+                        else if (densitycolor < 55){
+                            return '#e6f598';
                         }
-                        else if (densitycolor < 51){
-                            return '#EA5A3E';
+                        else if (densitycolor < 58){
+                            return '#ffffbf';
                         }
-                        else if (densitycolor < 71){
-                            return '#DA2B27';
+                        else if (densitycolor < 60){
+                            return '#fee08b' ;
                         }
-                        else if (densitycolor < 76){
-                            return '#C12600';
+                        else if (densitycolor < 65){
+                            return '#fdae61';
+                        }
+                        else if (densitycolor < 70){
+                            return '#f46d43';
                         }
                         else if (densitycolor < 81){
-                            return '#9B0000';
-                        }
-                        else if (densitycolor < 91){
-                            return '#6D0000';
+                            return  '#d53e4f';
                         }
                         else{
-                            return "#580000";
+                            return  '#9e0142';
                         }
                     }
                     }); 
@@ -822,8 +709,8 @@ var zoom = d3.zoom()
 
 svg.call(zoom);
 
- var w = 700,
-          h = 900;
+ var w = 550,
+          h = 850;
 
 
 var svg3 = d3.select("body")
@@ -849,6 +736,8 @@ Load json data
             var dataRegionName = region.region;
             var dataDensity = parseFloat(region.density);
             var dataLiteracy = parseFloat(region.literacy);
+            var dataLiteracyRate = parseFloat(region.literacyrate);
+            var dataUnemployment = parseFloat(region.unemployed);
             var toplot=region.to_plot;
            
 /*------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -863,6 +752,8 @@ Find correct feature in json (statename) and assign correct density value from c
                     //console.log(json.features[j].properties.name);
                     json.features[j].properties.density = dataDensity;
                     json.features[j].properties.literacy = dataLiteracy;
+                    json.features[j].properties.literacyrate = dataLiteracyRate;
+                    json.features[j].properties.unemployment = dataUnemployment;
                     json.features[j].properties.toplot = toplot;
                    // console.log(json.features[j].properties.density);
                     break;
@@ -879,8 +770,8 @@ Bind data and create one path per GeoJSON feature
             console.log(json);*/
             var projection2 = d3.geoMercator()
           .center([77.5946, 12.9716]) // Approximately the coordinates of Bangalore (slightly North)
-          .scale(105000)
-          .translate([w / 2, 410]);
+          .scale(95000)
+          .translate([w / 2.3, 370]);
                 
                 
    
@@ -908,11 +799,14 @@ Mouseover and mouseout events for tooltips
                      '<table width="100%" height="100%"><tr><th colspan="3" style="text-align:center">' + 
                           d.properties.WARD_NAME +
                          '</th></tr><tr><td width="45%" style="text-align:left">' +                          
-                         'Population</td><td width="5%">:</td><td style="text-align:right">'  + d.properties.density+''+ '</td></tr>'+
+                         'Population</td><td width="5%">:</td><td style="text-align:right">'  + (d3.format(",.0f")(d.properties.density))+''+ '</td></tr>'+
                 '<tr><td style="text-align:left" >'+
-                         'Literacy</td><td width="5%">:</td><td style="text-align:right">'  + d.properties.literacy+ '</td></tr>'+
+                         'Literacy</td><td width="5%">:</td><td style="text-align:right">'  + (d3.format(",.0f")(d.properties.literacy))+ '</td></tr>'+
                         '<tr><td style="text-align:left" >'+
-                         'Literacy %</td><td width="5%">:</td><td style="text-align:right">'  + d.properties.literacy*100/d.properties.density+ '</td></tr>'+
+                         'Literacy %</td><td width="5%">:</td><td style="text-align:right">'  + d.properties.literacyrate.toFixed(1)+'%'+ '</td></tr>'+
+                       
+                         '<tr><td style="text-align:left" >'+
+                        'Non working %</td><td width="5%">:</td><td style="text-align:right">'  + d.properties.unemployment.toFixed(1)+'%'+ '</td></tr>'+
                        /* '<tr><td style="text-align:left">'+
                          'EPC </td><td width="5%">:</td><td style="text-align:right">'  + d.epc+ ' Million BTUs'+ '</td></tr><tr><td style="text-align:left">'+ 
                         'Total </td><td width="5%">:</td><td style="text-align:right">'  + d.total +' Trillion BTUs'+ '</td></tr>*/
@@ -937,7 +831,7 @@ Hide tooltip on mouseout
 /*------------------------------------------------------------------------------------------------------------------------------------------------------
 Fill colors based on density. ower the density lighter the color.
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
-                      if (types=="population" && tmp=="total")
+                      if (types=="population")
                     {
 /*------------------------------------------------------------------------------------------------------------------------------------------------------
 Fill colors based on density. ower the density lighter the color.
@@ -982,130 +876,132 @@ Fill colors based on density. ower the density lighter the color.
                         
                         
                     }
-                else if (types=="literacy" && tmp=="total")
+                else if (types=="literacy")
                     {
-                          var densitycolor = d.properties.toplot;
-                         if(!densitycolor){
-                            return '#ccc';
-                        }
-                        if(densitycolor < 5001){
-                            return 'rgb(255,255,217)';
-                        }
-                        else if (densitycolor < 10501){
-                            return 'rgb(237,248,177)';
-                        }
-                        else if (densitycolor < 25001){
-                            return '#F0BA70';
-                        }
-                        else if (densitycolor < 30051){
-                            return 'rgb(233,199,180)';
-                        }
-                        else if (densitycolor < 55001){
-                            return '#F68756';
-                        }
-                        else if (densitycolor < 75001){
-                            return '#EA5A3E';
-                        }
-                        else if (densitycolor < 85000){
-                            return '#DA2B27';
-                        }
-                        else if (densitycolor < 90000){
-                            return '#C12600';
-                        }
-                        else if (densitycolor < 100000){
-                            return '#9B0000';
-                        }
-                        else if (densitycolor < 145001){
-                            return '#6D0000';
-                        }
-                        else{
-                            return "#580000";
-                        }
-                    }
-                else if (types=="population" && tmp=="perc")
-                    {
-/*------------------------------------------------------------------------------------------------------------------------------------------------------
-Fill colors based on density. ower the density lighter the color.
-------------------------------------------------------------------------------------------------------------------------------------------------------*/
-                        var density = d.properties.toplot;
+                           var density = d.properties.toplot;
                         if(!density){
                             return '#ccc';
                         }
-                        if(density < 0.1){
+                        if(density < 5001){
                             return 'rgb(255,255,217)';
                         }
-                        else if (density < 0.2){
+                        else if (density < 10501){
                             return 'rgb(237,248,177)';
                         }
-                        else if (density < 0.3){
+                        else if (density < 25001){
                             return 'rgb(199,233,180)';
                         }
-                        else if (density < 0.4){
+                        else if (density < 50051){
                             return 'rgb(127,205,187)';
                         }
-                        else if (density < 0.5){
+                        else if (density < 75001){
                             return 'rgb(65,182,196)';
                         }
-                        else if (density < 0.6){
+                        else if (density < 80001){
                             return 'rgb(29,145,192)';
                         }
-                        else if (density <0.8){
+                        else if (density < 85000){
                             return 'rgb(34,94,168)';
                         }
-                        else if (density < 1){
+                        else if (density < 90000){
                             return 'rgb(37,95,180)';
                         }
-                        else if (density < 5){
+                        else if (density < 100000){
                             return 'rgb(37,52,170)';
                         }
-                        else if (density < 10){
+                        else if (density < 145001){
                             return 'rgb(37,52,148)';
                         }
                         else{
                             return "rgb(37,52,108)";
-                        } 
+                        }
                         
                     }
-                else if (types=="literacy" && tmp=="perc")
+                else if (types=="literacyrate")
                     {
-                          var densitycolor = d.properties.toplot;
+/*------------------------------------------------------------------------------------------------------------------------------------------------------
+Fill colors based on density. ower the density lighter the color.
+------------------------------------------------------------------------------------------------------------------------------------------------------*/
+                       var density = d.properties.toplot;
+                        if(!density){
+                            return '#ccc';
+                        }
+                        if(density < 1){
+                            return 'rgb(255,255,217)';
+                        }
+                        else if (density < 50){
+                            return 'rgb(237,248,177)';
+                        }
+                        else if (density < 65){
+                            return 'rgb(199,233,180)';
+                        }
+                        else if (density < 70){
+                            return 'rgb(127,205,187)';
+                        }
+                        else if (density < 73){
+                            return 'rgb(65,182,196)';
+                        }
+                        else if (density < 76){
+                            return 'rgb(29,145,192)';
+                        }
+                        else if (density <82){
+                            return 'rgb(34,94,168)';
+                        }
+                        else if (density < 85){
+                            return 'rgb(37,95,180)';
+                        }
+                        else if (density < 87){
+                            return 'rgb(37,52,170)';
+                        }
+                        else if (density < 91){
+                            return 'rgb(37,52,148)';
+                        }
+                        else{
+                            return "rgb(37,52,108)";
+                        }
+                        
+                    }
+                else if (types=="unemployment")
+                    {
+                                var densitycolor = d.properties.toplot;
                          if(!densitycolor){
                             return '#ccc';
                         }
-                        if(densitycolor < 1){
-                            return 'rgb(255,255,217)';
+                        if(densitycolor < 10){
+                            return '#5e4fa2';
                         }
-                        else if (densitycolor < 3){
-                            return 'rgb(237,248,177)';
+                        else if (densitycolor < 41){
+                            return '#3288bd';
                         }
-                        else if (densitycolor < 5){
-                            return '#F0BA70';
+                        else if (densitycolor < 45){
+                            return  '#66c2a5';
                         }
-                        else if (densitycolor < 10){
-                            return 'rgb(233,199,180)';
+                        else if (densitycolor < 48){
+                            return  '#abdda4';
                         }
-                        else if (densitycolor < 25){
-                            return '#F68756';
+                        else if (densitycolor < 55){
+                            return '#e6f598';
                         }
-                        else if (densitycolor < 51){
-                            return '#EA5A3E';
+                        else if (densitycolor < 58){
+                            return '#ffffbf';
                         }
-                        else if (densitycolor < 71){
-                            return '#DA2B27';
+                        else if (densitycolor < 60){
+                            return '#fee08b' ;
                         }
-                        else if (densitycolor < 76){
-                            return '#C12600';
+                        else if (densitycolor < 65){
+                            return '#fdae61';
+                        }
+                        else if (densitycolor < 70){
+                            return '#f46d43';
                         }
                         else if (densitycolor < 81){
-                            return '#9B0000';
-                        }
-                        else if (densitycolor < 91){
-                            return '#6D0000';
+                            return  '#d53e4f';
                         }
                         else{
-                            return "#580000";
+                            return  '#9e0142';
                         }
-                    }
+                        
+ }
                 
                 
 

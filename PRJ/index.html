@@ -3,20 +3,41 @@
 	<head>
 		<meta charset="utf-8">
 		<title>India Maps</title>
-        <div>
+     
+        
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+        <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+
 <!--<button id="Population" class="btn btn-primary PopButton" onclick="location.href='index.html';" style="height: 30px">Population</button>
   <button id="Literacy" class="btn btn-success LiteracyButton" onclick="location.href='literacy.html';"  style="height: 30px">Literacy</button>-->
-            
+           <center> <h1>
+            Comparing Delhi and Bangalore: Population and Literacy</h1>
              <form>
-            <label><input type="radio" name="dataset" value="population" class="dataset" checked> Population</label>
-            <label><input type="radio" name="dataset" value="literacy" class="dataset"> Literacy</label>
-                 <br>
-                 <label><input type="radio" name="dataset2" value="total" class="dataset2" checked> Total</label>
-            <label><input type="radio" name="dataset2" value="perc" class="dataset2"> Percentage wise</label>
-            </form>
+               
+                 <div class="radio-toolbar">
+    <input type="radio" name="dataset" value="population" class="dataset" id="population" checked>
+    <label for="population" data-toggle="tooltip" title="Total Population" data-placement="bottom" >Population</label>
+
+    <input type="radio" name="dataset" value="literacy" class="dataset" id="literacy">
+    <label for="literacy" data-toggle="tooltip" title="Total Literate Population" data-placement="bottom">Literate Population</label>
+
+    <input type="radio" name="dataset" value="literacyrate" class="dataset" id="literacyrate"> 
+    <label for="literacyrate" data-toggle="tooltip" title="Literate population of ward*100/Total population of ward" data-placement="bottom">Literacy rate</label> 
+                     
+    <input type="radio" name="dataset" value="unemployment" class="dataset" id="unemployment"> 
+    <label for="unemployment" data-toggle="tooltip" title="Non-working population of ward*100/Total population of ward" data-placement="bottom">Non working population %</label> 
+</div>
+                 
+            </form></center>
   
-</div><br>
-        <h1>Delhi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bangalore</h1>
+
+        <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delhi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bangalore</h2>
        
 
     <script src="https://d3js.org/d3.v5.min.js"></script>      
@@ -36,4 +57,5 @@ two buttons for Population and Literacy
      <script type="text/javascript" src="popdensity.js"></script>
    
 	</body>
+    
 </html>
