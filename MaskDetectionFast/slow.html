@@ -1,0 +1,290 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opencv JS</title>
+    <script async src="js/opencv.js" onload="openCvReady();"></script>
+    <script src="js/utils.js"></script>
+<link rel="stylesheet" href="camera.css">
+</head>
+<div class="b-g"></div>
+
+<div class="b-g2"></div>
+<h1>OpenCV Camera</h1>
+    <div>
+        
+    </div>
+<div class="iphone">
+    
+
+      <div class="naver">
+    
+  <div id="golef" class="licon"><i class="fas fa-comment-alt"></i></div>      
+        <div class="underline-l"></div>
+        
+   <div id="snapBtn" class="action flee"></div>
+        
+   <div id="homep" class="action"></div>      
+    
+        
+        <div id="gorig" class="ricon"><i class="fas fa-th-large"></i></div>
+        
+        <div class="underline-r"></div>
+        
+        </div>
+  
+  <div class="page">
+    
+    
+    <div onclick="clearPhoto()" class="cross"><i class="fas fa-times"></i></div>
+    
+    <div id="switchFrontBtn" class="cameras lk"><i class="fas fa-retweet"></i></div>
+    
+        <div id="switchBackBtn" class="cameras kl"><i class="fas fa-retweet"></i></div>
+  
+    <div class="bitmo"><i class="fas fa-user"></i></div>
+    
+  <input class="search" placeholder="Search">
+      
+    <div class="mglass"><i class="fas fa-search"></i></div>
+    
+    <video id="cam" autoplay muted playsinline>Not available</video>
+  <canvas id="canvas" style="display:none"></canvas>  
+       <button id="actionBtn">Start</button>
+  <video id="cam_input" width="400" height="350"></video>
+    
+    
+
+    
+    <div class="page-l">
+
+    </div>
+    
+    <div class="page-r">
+
+    </div>
+       
+    </div>  
+  </div>
+    
+    
+    
+    
+    
+    <div class="iphone2">
+    
+
+      <div class="naver">
+    
+  <div id="golef" class="licon"><i class="fas fa-comment-alt"></i></div>      
+        <div class="underline-l"></div>
+        
+   <div id="snapBtn" class="action flee"></div>
+        
+   <div id="homep" class="action"></div>      
+    
+        
+        <div id="gorig" class="ricon"><i class="fas fa-th-large"></i></div>
+        
+        <div class="underline-r"></div>
+        
+        </div>
+  
+  <div class="page">
+    
+    
+    <div onclick="clearPhoto()" class="cross"><i class="fas fa-times"></i></div>
+    
+    <div id="switchFrontBtn" class="cameras lk"><i class="fas fa-retweet"></i></div>
+    
+        <div id="switchBackBtn" class="cameras kl"><i class="fas fa-retweet"></i></div>
+  
+    <div class="bitmo"><i class="fas fa-user"></i></div>
+    
+  <input class="search" placeholder="Search">
+    <div class="mglass"><i class="fas fa-search"></i></div>
+    
+    <video id="cam" autoplay muted playsinline>Not available</video>
+  <canvas id="canvas" style="display:none"></canvas>  
+      <canvas id="canvasOutput"></canvas>  
+    
+    
+
+    
+    <div class="page-l">
+
+    </div>
+    
+    <div class="page-r">
+
+    </div>
+       
+    </div>  
+  </div>
+</html>
+
+
+<script type="text/JavaScript">
+function openCvReady() {
+
+    let streaming = false;
+    const video = document.getElementById('video');
+    const actionBtn = document.getElementById('actionBtn');
+    const width = 400;
+    const height = 350;
+    let cap;
+    let src;
+    let dst;
+    let gray;
+    let faces;
+    let classifier;
+    let utils;
+    let faceCascadeFile;
+    let rect;
+    cv['onRuntimeInitialized']=()=>{
+        let video = document.getElementById("cam_input"); // video is the id of video tag
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        .then(function(stream) {
+            video.srcObject = stream;
+            video.play();
+        })
+        .catch(function(err) {
+            console.log("An error occurred! " + err);
+        });
+
+        cap = new cv.VideoCapture(cam_input);
+        faces = new cv.RectVector();
+        classifier = new cv.CascadeClassifier();
+        utils = new Utils('errorMessage');
+        faceCascadeFile = 'haarcascade_frontalface_default.xml'; // path to xml
+        utils.createFileFromUrl(faceCascadeFile, faceCascadeFile, () => {
+            classifier.load(faceCascadeFile); // in the callback, load the cascade from file
+        });
+    }
+
+    actionBtn.addEventListener('click', () => {
+        if (streaming) {
+            stop();
+            actionBtn.textContent = 'Start';
+        } else {
+            start();
+            actionBtn.textContent = 'Stop';
+        }
+    });
+
+
+    function start () {
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        .then(_stream => {
+            let video = document.getElementById("cam_input"); // video is the id of video tag
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        .then(function(stream) {
+            video.srcObject = stream;
+            video.play();
+        })
+        .catch(function(err) {
+            console.log("An error occurred! " + err);
+        });
+
+
+        stream = _stream;
+        console.log('stream', stream);
+        video.srcObject = stream;
+        video.play();
+        streaming = true;
+
+
+        src = new cv.Mat(height, width, cv.CV_8UC4);
+        dst = new cv.Mat(height, width, cv.CV_8UC1);
+        gray = new cv.Mat(height, width, cv.CV_8UC1);
+        faces = new cv.RectVector();
+        setTimeout(processVideo, 0)
+        })
+        .catch(err => console.log(`An error occurred: ${err}`));
+    }
+
+    function stop () {
+        if (video) {
+            video.pause();
+            video.srcObject = null;
+        }
+        if (stream) {
+            stream.getVideoTracks()[0].stop();
+        }
+        streaming = false;
+    }
+
+    const FPS = 1;
+    function processVideo() {
+        if (!streaming) {
+            src.delete();
+            dst.delete();
+            return;
+        }
+
+        let begin = Date.now();
+        cap.read(src);
+        src.copyTo(dst);
+        cv.cvtColor(dst, gray, cv.COLOR_RGBA2GRAY, 0);
+        // cv.applyColorMap(dst, cv.COLORMAP_HOT);
+
+        let tempCanvas = document.createElement("canvas");
+        cv.imshow(tempCanvas, dst)
+
+        let b64image = tempCanvas.toDataURL()
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({"image":b64image.split(',')[1]});
+
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        };
+
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const serverurl = "https://sunhacks-292004.wl.r.appspot.com/detect_mask";
+
+        fetch(proxyurl + serverurl, requestOptions)
+          .then(response => response.text())
+          .then(
+                    result => {
+                    if (result.startsWith("{", 0)){
+                        console.log("valid");
+                        console.log(JSON.parse(result));
+
+                        result = JSON.parse(result);
+
+
+                        cv.putText(
+                            dst, 
+                            result["mask"] +":"+ result["score"],
+                            new cv.Point(50, 50),
+                            cv.FONT_ITALIC,
+                            1, 
+                            [0, 0, 255, 255], 
+                            2, 
+                            cv.LINE_4
+                        )
+
+                        console.log(parseInt(result["xmin"]), parseInt(result["xmax"]), parseInt(result["ymin"]));
+                        let point1 = new cv.Point(parseInt(result["xmin"]), parseInt(result["ymin"]));
+                        let point2 = new cv.Point(parseInt(result["xmax"]), parseInt(result["ymax"]));
+                        cv.rectangle(dst, point1, point2, [255, 0, 0, 255]);
+                        //dst = cv.applyColorMap(dst, cv.COLORMAP_HOT);
+
+                    }
+                    else{
+                        console.log("not valid");
+                    }
+                    cv.imshow('canvasOutput', dst);
+                    setTimeout(processVideo, 0);
+                    }
+               )
+          .catch(error => console.log('error', error));
+
+    }
+}
+</script>
