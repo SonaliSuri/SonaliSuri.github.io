@@ -1,0 +1,390 @@
+body {
+  background: linear-gradient(to bottom, #ffff6d 0%,#fcde00 100%);
+  margin: 5 auto;
+  text-align: center;
+  font-family: "Helvetica Neue", Helvetica, Arial, 
+}
+
+.b-g {
+  background: linear-gradient(to bottom, #ffff6d 0%,#fcde00 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+button {
+  display: inline-block;
+  padding: 10px 45px;
+  font-size: 10px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+button:hover {background-color: #3e8e41}
+
+button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.b-g2 {
+ background-image: url("iconfinder_hat_13_2875608.png");
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: 150px;
+  opacity: 0.1;
+}
+
+.iphone {
+  position: fixed;
+  top: 50%;
+  left: 25%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 560px;
+  background: #1b1b1b;
+  border-radius: 35px;
+  box-shadow: 0px 0px 100px rgba(0,0,0,0.45);
+  overflow: hidden;
+  border: 4px solid #000;
+}
+
+.iphone:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 75px;
+  width: 10px;
+  height: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  background: #000;
+  z-index: 99;
+}
+
+.iphone2 {
+  position: fixed;
+  top: 50%;
+  left: 70%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 560px;
+  background: #1b1b1b;
+  border-radius: 35px;
+  box-shadow: 0px 0px 100px rgba(0,0,0,0.45);
+  overflow: hidden;
+  border: 4px solid #000;
+}
+
+
+
+.iphone2:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 75px;
+  width: 10px;
+  height: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  background: #000;
+  z-index: 99;
+}
+
+.licon {
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
+  width: 35px;
+  height: 35px;
+  background: transparent;
+  text-align: center;
+  line-height: 35px;
+  color: #fff;
+  font-size: 22px;
+    -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  cursor: pointer;
+  z-index: 10;
+}
+
+.licon:hover {
+  opacity: 0.8;
+}
+
+.ricon {
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
+  width: 25px;
+  height: 35px;
+  background: transparent;
+  text-align: center;
+  padding-left: 5px;
+  line-height: 35px;
+  color: #fff;
+  font-size: 37px;
+  cursor: pointer;
+  z-index: 10;
+  overflow:hidden;
+}
+
+.ricon:hover {
+  opacity: 0.8;
+}
+
+.action {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: transparent;
+  position: absolute;
+  bottom: 60px;
+  left: calc(50% - 30px);
+  border: 4px solid #fff;
+  cursor: pointer;
+  z-index: 12;
+}
+
+.action:hover {
+  opacity: 0.8;
+  border: 3px solid #fff;
+}
+
+.downsize .action {
+  bottom: 50px;
+}
+
+.page {
+  width: 300px;
+  height: 560px;
+  background: #1b1b1b;
+  transition: 1s ease;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.page-l {
+  position: absolute;
+  width: 300px;
+  left: -300px;
+  top: 0;
+  height: 560px;
+  position: absolute;
+  background: #aaa;
+}
+
+.page-r {
+  position: absolute;
+  width: 300px;
+  right: -300px;
+  top: 0;
+  height: 560px;
+  position: absolute;
+  background: #aaa;
+}
+
+.swipe-left {
+  right: -300px !important;
+}
+
+.swipe-right {
+  right: 300px !important;
+}
+
+.naver {
+  position: Absolute;
+  bottom: 0;
+  width: 300px;
+  left: 0;
+  transition: 1s;
+}
+
+.downsize {
+  width: 200px;
+  left: 50px;
+  bottom: 0px;
+}
+
+.nox {
+  display: none !important;
+}
+
+.yex {
+  display: block !important;
+}
+
+#homep {
+  display: none;
+}
+
+#photo {
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 560px;
+  z-index: 9;
+  text-align: center;
+    vertical-align: middle;
+  line-height: normal;
+}
+
+.underline-l {
+  position: absolute;
+  left: 50%;
+  height: 2px;
+  width: 30px;
+  bottom: 20px;
+  background: #eee;
+  z-index: 10;
+  border-radius: 25px;
+  opacity: 0;
+  transition: .1s;
+}
+
+.underl {
+  left: 28px;
+  opacity: 1;
+}
+
+.underline-r {
+  position: absolute;
+  right: 50%;
+  height: 2px;
+  width: 30px;
+  bottom: 20px;
+  background: #eee;
+  z-index: 10;
+  border-radius: 25px;
+  opacity: 0;
+  transition: .1s;
+}
+
+.underr {
+  right: 22px;
+  opacity: 1;
+}
+
+.bitmo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  z-index: 10;
+  overflow: hidden;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 46px;
+  font-size: 35px;
+  color: #fff;
+}
+
+.search {
+  position: absolute;
+  top: 30px;
+  left: 70px;
+  width: 180px;
+  height: 30px;
+  padding-left: 30px;
+  background: transparent;
+  z-index: 10;
+  text-align: left;
+  line-height: 40px;
+  color: #eee;
+  border: none;
+  outline: none;
+}
+
+.search::placeholder { 
+  color: #fff;
+}
+
+.mglass {
+  position: absolute;
+  left: 75px;
+  top: 32px;
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  z-index: 11;
+}
+
+.cameras {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  height: 30px;
+  width: 30px;
+  background: transparent;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 11;
+}
+
+.cameras:hover {
+  color: #aeaeae;
+}
+.cameras i {
+  transform: rotate(90deg);
+}
+
+.kl {
+  display: none;
+  background: transparent;
+    -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  right: 17px;
+}
+
+
+
+.lk {
+  display: block;
+}
+
+.cross {
+  position: Absolute;
+  top: 30px;
+  left: 30px;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  display: none;
+  z-index: 12;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.cross:hover {
+  opacity: 0.8;
+}
+
+.opz {
+  opacity: 0;
+}
