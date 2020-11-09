@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>
+		Register | EROSC
+	</title>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=0.8" name="viewport">
+	<link href="images/icons/favicon.ico" rel="icon" type="image/png"/>
+	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" rel="stylesheet"/>
+	<link href="vendor/animate/animate.css" rel="stylesheet" type="text/css">
+	<link href="vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" type="text/css">
+	<link href="vendor/select2/select2.min.css" rel="stylesheet" type="text/css">
+	<link href="css/util.css" rel="stylesheet" type="text/css">
+	<link href="css/main.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div class="limiter" id="loginPage">
+		<div class="container-login100">
+			<div style="position: absolute;top: 10%;font-size: xx-large;">
+				EROSC
+			</div>
+
+			<div class="wrap-login100">
+				<div class="login100-pic js-tilt pt-5" data-tilt="">
+					<img alt="IMG" src="images/NavisAlbumEnsign.png">
+					</img>
+					<span class="login100-form-title">
+
+					</span>
+				</div>
+				<form class="login100-form form-validate-200" id="form-register" v-show="visibility == 'register'">
+					<span class="login100-form-title">
+						Register
+					</span>
+
+					<!-- Choose a type of user -->
+					<form class="type">
+						<label for="userTypes">Choose your user type:</label>
+						<select class="form-control wrap-input100 input300" id="userTypeSelected">
+							<option selected="selected">User type</option>
+							<option value="personal">Personal</option>
+							<option value="company">Company</option>
+							<option value="broker">Broker</option>
+						</select>
+					</form>
+
+					<!-- Inputs for personal -->
+					<form class="personal">
+						<label for="">Choose your citizenship:</label>
+						<select class="form-control wrap-input100 input300" id="citizenship">
+							<option value="" selected="selected">Citizenship</option>
+							<option value="">British dependent territories (Includes Navis Album)</option>
+							<option value="">British overseas (Includes Hong Kong)</option>
+							<option value="">EU member state under articles 48 / 52 of the EU Treaty</option>
+							<option value="">Commonwealth</option>
+							<option value="">Non-United Kingdom nationals settled in the United Kingdom</option>
+							<option value="">United Kingdom</option>
+						</select>
+					</form>
+
+
+					<div class="wrap-input100 validate-input-200 personal" data-validate="name">
+						<input class="input200" name="firstname" placeholder="First Name" type="text">
+						<span class="focus-input200">
+						</span>
+						<span class="symbol-input200">
+							<i aria-hidden="true" class="fas fa-signature">
+							</i>
+						</span>
+						</input>
+					</div>
+
+					<div class="wrap-input100 validate-input-200 personal" data-validate="LastName">
+						<input class="input200" name="lastname" placeholder="Last Name" type="text">
+							<span class="focus-input200">
+							</span>
+							<span class="symbol-input200">
+								<i aria-hidden="true" class="fas fa-signature">
+								</i>
+							</span>
+						</input>
+					</div>
+
+					<!-- Inputs for broker -->
+					<form class="broker">
+						<label for="">Do you have a company?</label>
+						<select class="form-control wrap-input100 input300 broker" id="brokerTypeSelected">
+							<option value="" selected="selected">Do you have a company?</option>
+							<option value="yes">Yes</option>
+							<option value="no">No</option>
+						</select>
+					</form>
+
+					<!-- Inputs for broker with no company -->
+					<div class="wrap-input100 validate-input-200 broker-no" data-validate="name">
+						<input class="input200" name="name" placeholder="Broker Name" type="text">
+						<span class="focus-input200">
+						</span>
+						<span class="symbol-input200">
+							<i aria-hidden="true" class="fas fa-signature">
+							</i>
+						</span>
+						</input>
+					</div>
+
+					<!-- Inputs for broker with a company -->
+					<div class="wrap-input100 validate-input-200 broker-yes" data-validate="name">
+						<input class="input200" name="name" placeholder="Company Name" type="text">
+						<span class="focus-input200">
+						</span>
+						<span class="symbol-input200">
+							<i aria-hidden="true" class="fas fa-building">
+							</i>
+						</span>
+						</input>
+					</div>
+
+					<div class="wrap-input100 validate-input-200 broker-yes" data-validate="name">
+						<input class="input200" name="name" placeholder="Company Location" type="text">
+						<span class="focus-input200">
+						</span>
+						<span class="symbol-input200">
+							<i aria-hidden="true" class="fas fa-building">
+							</i>
+						</span>
+						</input>
+					</div>
+
+					<div class="wrap-input100 validate-input-200 broker-yes" data-validate="name">
+						<input class="input200" name="name" placeholder="Company Number" type="text">
+						<span class="focus-input200">
+						</span>
+						<span class="symbol-input200">
+							<i aria-hidden="true" class="fas fa-pen">
+							</i>
+						</span>
+						</input>
+					</div>
+
+					<!-- Inputs for company-->
+					<form class="company">
+						<label for="">Choose your company registered location</label>
+						<select class="form-control wrap-input100 input300 company" id="companyLocation">
+							<option value="" selected="selected">Company registered location</option>
+							<option value="">Navis Album</option>
+							<option value="">Other British dependent territories</option>
+							<option value="">European Economic Area (EEA) countries</option>
+							<option value="">British overseas possession</option>
+							<option value="">European Economic Interest Grouping (EEIG)</option>
+							<option value="">Commonwealth state</option>
+						</select>
+					</form>
+
+					<div class="wrap-input100 validate-input-200 company" data-validate="name">
+						<input class="input200" name="name" placeholder="Company Name" type="text">
+						<span class="focus-input200">
+						</span>
+						<span class="symbol-input200">
+							<i aria-hidden="true" class="fas fa-building">
+							</i>
+						</span>
+						</input>
+					</div>
+
+					<div class="wrap-input100 validate-input-200 company" data-validate="name">
+						<input class="input200" name="name" placeholder="Company Number" type="text">
+						<span class="focus-input200">
+						</span>
+						<span class="symbol-input200">
+							<i aria-hidden="true" class="fas fa-pen">
+							</i>
+						</span>
+						</input>
+					</div>
+
+					<!-- Input email -->
+					<div class="wrap-input100 validate-input-200" data-validate="email: ex@abc.xyz">
+						<input class="input200" name="email" placeholder="Email" type="email">
+							<span class="focus-input200">
+							</span>
+							<span class="symbol-input200">
+								<i aria-hidden="true" class="fa fa-envelope">
+								</i>
+							</span>
+						</input>
+					</div>
+
+					<!-- Input password -->
+					<div class="wrap-input100 validate-input-200" data-validate="password">
+						<input class="input200" id="pass1" name="pass1" placeholder="Password" type="password">
+							<span class="focus-input200">
+							</span>
+							<span class="symbol-input200">
+								<i aria-hidden="true" class="fa fa-lock">
+								</i>
+							</span>
+						</input>
+					</div>
+
+					<!-- Input password2 -->
+					<div class="wrap-input100 validate-input-200" data-validate="password2">
+						<input class="input200" id="pass2" name="pass2" placeholder="Confirm Password" type="password">
+							<span class="focus-input200">
+							</span>
+							<span class="symbol-input200">
+								<i aria-hidden="true" class="fa fa-lock">
+								</i>
+							</span>
+							<p class="fs-12 pos-absolute pr-3 right-0 text-danger" id="pass2-w">
+								<i class="fas fa-exclamation-triangle">
+								</i>
+							</p>
+						</input>
+					</div>
+
+					<!-- Submit button -->
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" type="submit">
+							Submit
+						</button>
+					</div>
+
+					<!-- Login routing -->
+					<div class="text-center p-t-12" >
+						<span class="txt1" >
+							Already have an account? :
+						</span>
+						<a class="txt2" href="./login.html">
+							LOGIN
+						</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
+</script>
+<script crossorigin="anonymous" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" src="https://code.jquery.com/jquery-3.5.0.min.js">
+</script>
+<script src="vendor/bootstrap/js/popper.js" type="text/javascript">
+</script>
+<script src="vendor/bootstrap/js/bootstrap.min.js" type="text/javascript">
+</script>
+<script crossorigin="anonymous" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js">
+</script>
+<script src="vendor/select2/select2.min.js" type="text/javascript">
+</script>
+<script src="js/main.js" type="text/javascript">
+</script>
+<script src="vendor/tilt/tilt.jquery.min.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+	$('.js-tilt').tilt({
+		scale: 1.1
+	})
+</script>
+<script defer="" src="https://ajax.cloudflare.com/cdn-cgi/scripts/7089c43e/cloudflare-static/rocket-loader.min.js">
+</script>
+</body>
+</html>
